@@ -2,7 +2,7 @@ import tkinter as tk
 from utils import shelve_get
 
 
-class MainWindow(object):
+class ListWindow(object):
     def __init__(self, root, leo_obj):
         self.root = root
         self.leo = leo_obj
@@ -10,5 +10,5 @@ class MainWindow(object):
 
     @staticmethod
     def get_canvas_coordinates():
-        coordinates = shelve_get('main_coordinates')
+        coordinates = shelve_get('list_coordinates')
         return coordinates

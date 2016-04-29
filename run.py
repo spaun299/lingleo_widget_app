@@ -1,13 +1,12 @@
 import tkinter
-import websocket
-from config import ws_url
+from config import app_name
+from main import Main
 
-root = tkinter.Tk(screenName='Lingleo Widget')
 
-# root.overrideredirect(1)
-frame = tkinter.Frame(root, width=300, height=250)
-frame.bind('<Button -1>')
-frame.pack()
-button = tkinter.Button(frame, command=root.withdraw)
-button.pack()
-root.mainloop()
+def root():
+    master = tkinter.Tk(screenName=app_name)
+    Main(master)
+    return master
+
+if __name__ == '__main__':
+    root().mainloop()
