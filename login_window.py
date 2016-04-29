@@ -14,10 +14,9 @@ class Login(object):
         self.write_canvas()
 
     def write_canvas(self):
-        coordinates = get_coordinates('main')
+        coordinates = get_coordinates('main', self.root)
         self.root.geometry('%dx%d+%d+%d' % (coordinates['w'], coordinates['h'],
                                             coordinates['x'], coordinates['y']))
-
 
     @staticmethod
     def get_canvas_coordinates():

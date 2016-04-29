@@ -1,5 +1,6 @@
 import shelve
 import os
+import config
 
 
 def shelve_get(keys):
@@ -12,11 +13,17 @@ def shelve_get(keys):
 
 def shelve_save(**kwargs):
     shelve_file = shelve.open(os.path.join('shelve_session'), writeback=True)
-    print(kwargs)
     for k, v in kwargs.items():
         shelve_file[k] = v
 
 
-def get_coordinates(window):
+def get_coordinates(window, root):
     key = '%s_coordinates' % window
-    return shelve_get([key, ])[key]
+    coordinates = shelve_get([key, ])
+    if coordinates:
+        coordinates = coordinates[key]
+    else:
+        coordinates = {'x': (root.winfo_screenwidth() / 2) - (config.WIDTH_DEFAULT / 2),
+                       'y': (root.winfo_screenheight() / 2) - (config.HEIGHT_DEFAULT / 2),
+                       'w': config.WIDTH_DEFAULT, 'h': config.HEIGHT_DEFAULT}
+    return coordinates
