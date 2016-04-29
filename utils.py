@@ -12,5 +12,11 @@ def shelve_get(keys):
 
 def shelve_save(**kwargs):
     shelve_file = shelve.open(os.path.join('shelve_session'), writeback=True)
-    for kwarg in kwargs:
-        shelve_file[kwarg] = kwargs[kwarg]
+    print(kwargs)
+    for k, v in kwargs.items():
+        shelve_file[k] = v
+
+
+def get_coordinates(window):
+    key = '%s_coordinates' % window
+    return shelve_get([key, ])[key]
