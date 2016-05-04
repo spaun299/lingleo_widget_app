@@ -1,6 +1,7 @@
 import shelve
 import os
 import config
+import tkinter as tk
 
 
 def shelve_get(keys):
@@ -29,3 +30,8 @@ def get_coordinates(window, root):
                        'y': (root.winfo_screenheight() / 2) - (config.HEIGHT_DEFAULT / 2),
                        'w': config.WIDTH_DEFAULT, 'h': config.HEIGHT_DEFAULT}
     return coordinates
+
+
+def create_text(root, x, y, text, anchor='nw'):
+    txt = root.create_text(x, y, anchor=anchor, font=root.master.font)
+    root.itemconfig(txt, text=text)

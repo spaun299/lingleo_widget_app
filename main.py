@@ -3,6 +3,7 @@ from main_window import MainWindow
 from utils import shelve_get, shelve_save, get_coordinates
 from lingleo_client import GetLeoDict
 from list_window import ListWindow
+from tkinter.font import Font
 
 
 class Main(object):
@@ -47,4 +48,5 @@ class Main(object):
         self.root.destroy()
 
     def configure(self):
+        self.root.font = Font(font=('Helvetica', '9', 'normal'))
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
