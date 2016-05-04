@@ -1,5 +1,5 @@
 import tkinter as tk
-from utils import shelve_get
+from utils import shelve_get, get_coordinates
 
 
 class MainWindow(object):
@@ -7,9 +7,8 @@ class MainWindow(object):
         root.state = 'main'
         self.root = root
         self.leo = leo_obj
-        self.coordinates = self.get_canvas_coordinates()
 
-    @staticmethod
-    def get_canvas_coordinates():
-        coordinates = shelve_get('main_coordinates')
-        return coordinates
+    def configure(self):
+        coordinates = get_coordinates('main', self.root)
+        self.root.geometry('%dx%d+%d+%d' % (coordinates['w'], coordinates['h'],
+                                            coordinates['x'], coordinates['y']))

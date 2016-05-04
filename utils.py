@@ -5,14 +5,16 @@ import config
 
 def shelve_get(keys):
     ret = dict()
-    shelve_file = shelve.open(os.path.join('shelve_session'))
+    shelve_file = shelve.open('%s\shelve_session' % os.path.dirname(
+        os.path.abspath(__file__)))
     for key in keys:
         ret[key] = shelve_file.get(key)
     return ret
 
 
 def shelve_save(**kwargs):
-    shelve_file = shelve.open(os.path.join('shelve_session'), writeback=True)
+    shelve_file = shelve.open('%s\shelve_session' % os.path.dirname(
+        os.path.abspath(__file__)), writeback=True)
     for k, v in kwargs.items():
         shelve_file[k] = v
 

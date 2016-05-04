@@ -1,6 +1,6 @@
 from login_window import Login
 from main_window import MainWindow
-from utils import shelve_get, shelve_save
+from utils import shelve_get, shelve_save, get_coordinates
 from lingleo_client import GetLeoDict
 from list_window import ListWindow
 
@@ -11,7 +11,7 @@ class Main(object):
         self.user_credentials = self.get_user_credentials()
         self.leo = GetLeoDict(**self.user_credentials)
         self.authorized = self.leo.authorized
-        self.last_program_state = self.last_program_state
+        self.last_program_state = self.last_program_state()
         self.configure()
         if not self.authorized:
             Login(self.root)
@@ -25,8 +25,12 @@ class Main(object):
         return shelve_get(['email', 'password'])
 
     @staticmethod
-    def last_program_state(self):
+    def last_program_state():
         state = shelve_get(['last_state'])
+        if state:
+            state = state['last_state']
+        else:
+            state = 'main'
         return state
 
     def on_closing(self):

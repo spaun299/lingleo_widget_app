@@ -21,7 +21,11 @@ class AuthorizeLeo(Base):
     def __get_authorized_cookie(self):
         session = requests.Session()
         data = {'email': self.email, 'password': self.password}
-        resp = session.post('%s/ru/login?%s' % (leo_url, urllib.parse.urlencode(data)))
+        try:
+            resp = session.post('%s/ru/login?%s' % (leo_url, urllib.parse.urlencode(data)))
+        except ConnectionError as e:
+            self.authorized = False
+            return
         if 'login' in resp.url:
             self.authorized = False
             return
