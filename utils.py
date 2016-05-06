@@ -23,7 +23,7 @@ def shelve_save(**kwargs):
 def get_coordinates(window, root):
     key = '%s_coordinates' % window
     coordinates = shelve_get([key, ])
-    if coordinates:
+    if coordinates.get('main_coordinates'):
         coordinates = coordinates[key]
     else:
         coordinates = {'x': (root.winfo_screenwidth() / 2) - (config.WIDTH_DEFAULT / 2),
@@ -35,3 +35,8 @@ def get_coordinates(window, root):
 def create_text(root, x, y, text, anchor='nw'):
     txt = root.create_text(x, y, anchor=anchor, font=root.master.font)
     root.itemconfig(txt, text=text)
+
+
+def destroy(root):
+    for child in root.winfo_children():
+        child.destroy()
