@@ -42,6 +42,10 @@ class GetLeoDict(AuthorizeLeo):
     FILTER_LEARNING = 'learning'
     FILTER_LEARNED = 'learned'
     FILTER_NEW = 'no_translate'
+    STATE_ALL = 'all_words'
+    STATE_LEARNING = 'learning_words'
+    STATE_NEW = 'new_words'
+    STATE_LEARNED = 'learned_words'
 
     def __init__(self, email, password):
         super(GetLeoDict, self).__init__(email, password)

@@ -8,7 +8,7 @@ class MainWindow(object):
         root.state = 'main'
         self.root = root
         self.leo = leo_obj
-        self.words_state = self.leo.FILTER_ALL
+        self.words_state = self.leo.STATE_ALL
         self.configure()
         self.create_menu()
 
@@ -24,9 +24,17 @@ class MainWindow(object):
         self.root.config(menu=menu)
         file_menu = tk.Menu(menu, tearoff=False)
         menu.add_cascade(label='File', menu=file_menu)
+        file_menu.add_command(label='Save all words',
+                              command=lambda: self.save_words(self.leo.STATE_ALL))
+        file_menu.add_command(label='Save learning words',
+                              command=lambda: self.save_words(self.leo.STATE_LEARNING))
+        file_menu.add_command(label='Save learned words',
+                              command=lambda: self.save_words(self.leo.STATE_LEARNED))
+        file_menu.add_command(label='Save new words',
+                              command=lambda: self.save_words(self.leo.STATE_NEW))
+        file_menu.add_separator()
         file_menu.add_command(label='Logout', command=self.logout)
         file_menu.add_command(label='Exit', command=self.root.quit)
-        file_menu.add_command(label='Save all words', command=self.save_words)
         words_menu = tk.Menu(menu, tearoff=False)
         menu.add_cascade(label='Words', menu=words_menu)
 
@@ -35,13 +43,16 @@ class MainWindow(object):
         destroy(self.root)
         self.root.login_obj(self.root)
 
-    def save_words(self):
+    def save_words(self, words_state=None):
         file_name = self.get_filename_to_save()
-        if not file_name:  # asksaveasfile return `None` if dialog closed with "cancel".
+        words_state = words_state or self.words_state
+        if not file_name:
             return
         with open(file_name, mode='w') as f:
-            for leo_obj in getattr(self.leo, self.words_state):
-                f.write(leo_obj['en_name'] + ' : ' + leo_obj['translated'])
+            for leo_obj in getattr(self.leo, words_state):
+                f.write(leo_obj['en_name'].capitalize() +
+                        ' : ' +
+                        leo_obj['translated'].capitalize() + '\n')
 
     @staticmethod
     def get_filename_to_save():
