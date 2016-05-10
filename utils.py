@@ -13,6 +13,12 @@ def shelve_get(keys):
     return ret
 
 
+def shelve_delete(key):
+    shelve_file = shelve.open('%s\shelve_session' % os.path.dirname(
+        os.path.abspath(__file__)), writeback=True)
+    del shelve_file[key]
+
+
 def shelve_save(**kwargs):
     shelve_file = shelve.open('%s\shelve_session' % os.path.dirname(
         os.path.abspath(__file__)), writeback=True)

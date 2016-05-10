@@ -14,7 +14,6 @@ class Main(object):
         self.authorized = self.leo.authorized
         self.last_program_state = self.last_program_state()
         self.configure()
-        Login(self.root)
         if not self.authorized:
             Login(self.root)
         elif self.last_program_state == 'list':
