@@ -46,6 +46,10 @@ class GetLeoDict(AuthorizeLeo):
     STATE_LEARNING = 'learning_words'
     STATE_NEW = 'new_words'
     STATE_LEARNED = 'learned_words'
+    STATE_READABLE = dict(all_words='All words',
+                          learning_words='Learning words',
+                          new_words='New words',
+                          learned_words='Learned words')
 
     def __init__(self, email, password):
         super(GetLeoDict, self).__init__(email, password)
