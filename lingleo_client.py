@@ -102,5 +102,3 @@ class GetLeoDict(AuthorizeLeo):
                                                   'translated': ','.join(translated)})
             page += 1
         return words
-
-leo = GetLeoDict('spaun1002@gmail.com', '7847473')

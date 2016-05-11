@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter.filedialog import asksaveasfilename
-from utils import shelve_get, get_coordinates, shelve_delete, destroy
+from utils import shelve_get, get_coordinates, shelve_delete, destroy, create_text
 from tkinter.messagebox import showinfo
 import config
 
@@ -12,10 +12,18 @@ class MainWindow(object):
         self.leo = leo_obj
         self.words_state = self.leo.STATE_ALL
         self.statusbar = None
+        self.frame = None
+        self.canvas = None
+        self.scrollbar = None
+        self.words_canvas_text = None
         self._last_action = 'Logged in'
         self.configure()
+        self.create()
+
+    def create(self):
         self.create_menu()
         self.create_statusbar()
+        self.show_words()
 
     @property
     def last_action(self):
@@ -52,6 +60,50 @@ class MainWindow(object):
         file_menu.add_command(label='Exit', command=self.root.quit)
         words_menu = tk.Menu(menu, tearoff=False)
         menu.add_cascade(label='Words', menu=words_menu)
+        words_menu.add_command(label='All words', command=self.show_words)
+        words_menu.add_command(label='New words',
+                               command=lambda: self.show_words(
+                                   words_state=self.leo.STATE_NEW))
+        words_menu.add_command(label='Learned words',
+                               command=lambda: self.show_words(
+                                   words_state=self.leo.STATE_LEARNED))
+        words_menu.add_command(label='Learning words',
+                               command=lambda: self.show_words(
+                                   words_state=self.leo.STATE_LEARNING))
+
+    def show_words(self, words_state='all_words'):
+        self.words_state = words_state
+        new = True
+        y = 30
+        words = getattr(self.leo, self.words_state)
+        if self.frame:
+            new = False
+            self.canvas.destroy()
+        else:
+            self.frame = tk.Frame(self.root, bd=2, relief=tk.SUNKEN)
+            self.frame.font = self.root.font
+            self.frame.grid_rowconfigure(0, weight=1)
+            self.frame.grid_columnconfigure(0, weight=1)
+            self.scrollbar = tk.Scrollbar(self.frame)
+            self.scrollbar.grid(row=0, column=1, sticky=tk.N + tk.S)
+        self.canvas = tk.Canvas(self.frame, bd=0, background=self.root['background'],
+                                scrollregion=(0, 0, 0, len(words) * y + 50),
+                                yscrollcommand=self.scrollbar.set)
+        self.canvas.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
+
+        def _on_mousewheel(event):
+            self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        self.root.bind_all("<MouseWheel>", _on_mousewheel)
+
+        for word in words:
+            if len(word['en_name']) > 40:
+                word['en_name'] = word['en_name'][:40]
+            create_text(self.canvas, 120, y, word['en_name'])
+            create_text(self.canvas, 400, y, word['translated'])
+            y += 30
+        self.scrollbar.config(command=self.canvas.yview)
+        if new:
+            self.frame.pack(expand=True, fill=tk.BOTH)
 
     def logout(self):
         shelve_delete('password')
