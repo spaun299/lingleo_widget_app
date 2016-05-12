@@ -14,6 +14,7 @@ class MainWindow(object):
         self.statusbar = None
         self.frame = None
         self.canvas = None
+        self.canvas_size = None
         self.scrollbar = None
         self.words_canvas_text = None
         self._last_action = 'Logged in'
@@ -100,14 +101,17 @@ class MainWindow(object):
             self.frame.grid_columnconfigure(0, weight=1)
             self.scrollbar = tk.Scrollbar(self.frame)
             self.scrollbar.grid(row=0, column=1, sticky=tk.N + tk.S)
+        self.canvas_size = len(words) * 30
         self.canvas = tk.Canvas(self.frame, bd=0, background=self.root['background'],
-                                scrollregion=(0, 0, 0, len(words) * 30 + 50),
+                                scrollregion=(0, 0, 0, len(words) * 30),
                                 yscrollcommand=self.scrollbar.set,
                                 highlightthickness=0)
         self.canvas.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
 
         def _on_mousewheel(event):
-            self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+            if self.canvas_size > self.canvas.winfo_height():
+                self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         self.root.bind_all("<MouseWheel>", _on_mousewheel)
 
         for count, word in enumerate(words, start=1):
