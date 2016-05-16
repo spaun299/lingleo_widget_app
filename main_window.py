@@ -37,10 +37,10 @@ class MainWindow(object):
 
     def configure(self):
         coordinates = get_coordinates('main', self.root)
-        self.root.resizable(True, True)
-        self.root.configure(background='#48B484')
         self.root.geometry('%dx%d+%d+%d' % (coordinates['w'], coordinates['h'],
                                             coordinates['x'], coordinates['y']))
+        self.root.resizable(True, True)
+        self.root.configure(background='#48B484')
 
     def create_toolbar(self):
         toolbar = tk.Frame(self.root, bd=0, relief=tk.RAISED)
@@ -109,7 +109,6 @@ class MainWindow(object):
         self.canvas.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
 
         def _on_mousewheel(event):
-
             if self.canvas_size > self.canvas.winfo_height():
                 self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         self.root.bind_all("<MouseWheel>", _on_mousewheel)

@@ -4,24 +4,44 @@ import config
 import tkinter as tk
 
 
+def documents_folder():
+    return os.path.expanduser('~/Documents')
+
+
+def get_folder_path_in_documents(folder='LingLeo'):
+    return documents_folder() + '/' + folder
+
+
+# def get_file_path_in_documents(file_name):
+#     focuments_folder = os.path.expanduser('~/Documents')
+#     path = []
+#     found = False
+#     for name in reversed(os.path.dirname(os.path.abspath(__file__)).split('\\')):
+#         if config.app_name.replace(' ', '') == path or found:
+#             path.append(name)
+#     return '\\'.join(path) + '\\' + file_name
+
+
 def shelve_get(keys):
     ret = dict()
-    shelve_file = shelve.open('%s\shelve_session' % os.path.dirname(
-        os.path.abspath(__file__)))
+    shelve_file = shelve.open(
+        get_folder_path_in_documents() + '/' + 'shelve_session')
     for key in keys:
         ret[key] = shelve_file.get(key)
     return ret
 
 
 def shelve_delete(key):
-    shelve_file = shelve.open('%s\shelve_session' % os.path.dirname(
-        os.path.abspath(__file__)), writeback=True)
+    shelve_file = shelve.open(
+        shelve.open(get_folder_path_in_documents() + '/' + 'shelve_session'),
+        writeback=True)
     del shelve_file[key]
 
 
 def shelve_save(**kwargs):
-    shelve_file = shelve.open('%s\shelve_session' % os.path.dirname(
-        os.path.abspath(__file__)), writeback=True)
+    shelve_file = shelve.open(
+        get_folder_path_in_documents() + '/' + 'shelve_session',
+        writeback=True)
     for k, v in kwargs.items():
         shelve_file[k] = v
 

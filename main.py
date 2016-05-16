@@ -2,8 +2,9 @@ from login_window import Login
 from main_window import MainWindow
 from utils import shelve_get, shelve_save, get_coordinates
 from lingleo_client import GetLeoDict
-from list_window import ListWindow
+from leaf_window import LeafWindow
 from tkinter.font import Font
+import os
 
 
 class Main(object):
@@ -17,7 +18,7 @@ class Main(object):
         if not self.authorized:
             Login(self.root)
         elif self.last_program_state == 'list':
-            ListWindow(self.root, self.leo)
+            LeafWindow(self.root, self.leo)
         else:
             MainWindow(self.root, self.leo)
 
@@ -49,5 +50,6 @@ class Main(object):
         self.root.destroy()
 
     def configure(self):
+        self.root.iconbitmap(os.path.join('favicon.ico'))
         self.root.font = Font(font=('Helvetica', '9', 'normal'))
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
