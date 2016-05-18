@@ -3,6 +3,7 @@ from tkinter.filedialog import asksaveasfilename
 from utils import shelve_get, get_coordinates, shelve_delete, destroy, create_text
 from tkinter.messagebox import showinfo
 import config
+from leaf_window import LeafWindow
 
 
 class MainWindow(object):
@@ -111,6 +112,7 @@ class MainWindow(object):
         def _on_mousewheel(event):
             if self.canvas_size > self.canvas.winfo_height():
                 self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
         self.root.bind_all("<MouseWheel>", _on_mousewheel)
 
         for count, word in enumerate(words, start=1):
@@ -119,7 +121,7 @@ class MainWindow(object):
             create_text(self.canvas, 20, y, count)
             create_text(self.canvas, 70, y, word['en_name'])
             create_text(self.canvas, 400, y, word['translated'])
-            self.canvas.create_line(0, y-8, 9999, y-8, fill='#43A579')
+            self.canvas.create_line(0, y - 8, 9999, y - 8, fill='#43A579')
             y += 30
         self.canvas.create_line(60, 0, 60, len(words) * 30, fill='#43A579')
         self.canvas.create_line(395, 0, 395, len(words) * 30, fill='#43A579')
@@ -154,10 +156,14 @@ class MainWindow(object):
         return f
 
     def create_statusbar(self):
-        statusbar = tk.Label(self.root, text=self.statusbar_message(last_action='Logged in'),
+        statusbar = tk.Label(self.root,
+                             text=self.statusbar_message(last_action='Logged in'),
                              bd=1, relief=tk.SUNKEN,
                              anchor=tk.W)
         statusbar.pack(side=tk.BOTTOM, fill=tk.X)
+        butt = tk.Button(statusbar, text='LEAF WORDS', width=20, height=1,
+                         font=('Helvetica', '9', 'bold'), bg='#22A7F0')
+        butt.pack(side=tk.RIGHT)
         self.statusbar = statusbar
 
     def change_statusbar_message(self, message='', last_action=''):
@@ -167,8 +173,12 @@ class MainWindow(object):
 
     def statusbar_message(self, message='', last_action=''):
         words_count = len(getattr(self.leo, self.words_state))
+
         last_action = 'Last action: %s' % last_action
-        return '%s\t\t%s : %s\t\t%s' % (last_action,
-                                        self.leo.STATE_READABLE[self.words_state],
-                                        words_count,
-                                        message)
+        return '%s\t\tWords  All:%s  New:%s  LD:%s  LG:%s\t\t%s' % (last_action,
+                                                                    len(self.leo.all_words),
+                                                                    len(self.leo.new_words),
+                                                                    len(self.leo.learned_words),
+                                                                    len(self.leo.learning_words),
+                                                                    message
+                                                                    )

@@ -2,6 +2,7 @@ import tkinter
 from config import app_name
 from main import Main
 from login_window import Login
+from main_window import MainWindow
 import os
 from utils import documents_folder, get_folder_path_in_documents
 
@@ -10,6 +11,7 @@ def root():
     master = tkinter.Tk(screenName=app_name,
                         baseName=app_name, className=app_name)
     master.login_obj = Login
+    master.main_obj = MainWindow
     Main(master)
 
     return master

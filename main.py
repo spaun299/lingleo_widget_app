@@ -17,7 +17,7 @@ class Main(object):
         self.configure()
         if not self.authorized:
             Login(self.root)
-        elif self.last_program_state == 'list':
+        elif self.last_program_state == 'leaf':
             LeafWindow(self.root, self.leo)
         else:
             MainWindow(self.root, self.leo)
